@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.job.rssreader.github.DaggerRssApiComponent;
 import com.job.rssreader.rss.RssApi;
 import com.job.rssreader.rss.pojo.Rss;
 import com.job.rssreader.utils.URLHelper;
@@ -25,12 +26,10 @@ public class PostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(URLHelper.LIFEHACKER_BASE_URL)
-                .addConverterFactory(SimpleXmlConverterFactory.create())
-                .build();
-
-        retrofit.create(RssApi.class).getLifehacker().enqueue(new Callback<Rss>() {
+        DaggerRssApiComponent
+                .create()
+                .getRssApi()
+                .getLifehacker().enqueue(new Callback<Rss>() {
             @Override
             public void onResponse(Call<Rss> call, Response<Rss> response) {
                 Log.d(TAG, "onResponse: " + response.body().getChannel().getItem().get(0).toString());
@@ -39,7 +38,7 @@ public class PostActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Rss> call, Throwable t) {
-                Log.d(TAG, "onFailure: "+t.getMessage());
+                Log.d(TAG, "onFailure: " + t.getMessage());
 
             }
         });
