@@ -1,12 +1,12 @@
 package com.job.rssreader.adapter;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.job.rssreader.R;
@@ -17,13 +17,23 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by slavik on 6/4/18.
  */
 
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder> {
+    private final OnItemClickListener listener;
     private List<Item> mData = new ArrayList<>();
+
+    public ItemsAdapter(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Item item);
+    }
 
     @NonNull
     @Override
@@ -35,7 +45,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>
 
     @Override
     public void onBindViewHolder(@NonNull ItemsHolder holder, int position) {
-        holder.bind(mData.get(position));
+        holder.bind(mData.get(position), listener);
     }
 
     @Override
@@ -53,13 +63,16 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>
         ImageView imageView;
         @BindView(R.id.item_title)
         TextView itemTitle;
+        @BindView(R.id.data_container)
+        LinearLayout linearLayout;
 
         ItemsHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
 
-        void bind(Item item) {
+        void bind(Item item, OnItemClickListener listener) {
+            linearLayout.setOnClickListener(v -> listener.onItemClick(item));
             itemTitle.setText(item.getTitle());
         }
     }

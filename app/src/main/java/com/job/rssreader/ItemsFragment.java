@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.job.rssreader.adapter.ItemsAdapter;
 import com.job.rssreader.dagger.component.DaggerItemsFragmentComponent;
+import com.job.rssreader.dagger.module.ApplicationContextModule;
 import com.job.rssreader.presenter.ItemsPresenter;
 import com.job.rssreader.presenter.ItemsPresenterContract;
 import com.job.rssreader.rss.pojo.Item;
@@ -50,7 +51,9 @@ public class ItemsFragment extends Fragment implements ItemsPresenterContract {
         bind = ButterKnife.bind(this, view);
 
         DaggerItemsFragmentComponent
-                .create()
+                .builder()
+                .applicationContextModule(new ApplicationContextModule(getContext()))
+                .build()
                 .injectItemsFragment(this);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
