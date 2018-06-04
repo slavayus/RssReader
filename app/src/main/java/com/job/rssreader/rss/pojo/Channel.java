@@ -38,7 +38,7 @@ public class Channel {
         this.link = link;
     }
 
-    public List<Item> getItem() {
+    public List<Item> getItems() {
         return itemList;
     }
 

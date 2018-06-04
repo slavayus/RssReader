@@ -43,11 +43,16 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>
         return mData.size();
     }
 
+    public void setData(List<Item> data) {
+        this.mData = data;
+        notifyDataSetChanged();
+    }
+
     class ItemsHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.item_image)
         ImageView imageView;
         @BindView(R.id.item_title)
-        TextView textView;
+        TextView itemTitle;
 
         ItemsHolder(View view) {
             super(view);
@@ -55,7 +60,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>
         }
 
         void bind(Item item) {
-
+            itemTitle.setText(item.getTitle());
         }
     }
 }
