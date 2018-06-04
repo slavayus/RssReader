@@ -8,6 +8,7 @@ import com.job.rssreader.model.ItemsModelContract;
 import com.job.rssreader.rss.pojo.Item;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,6 +42,7 @@ public class ItemsPresenter {
         model.loadItemsFromFeedburner(new ItemsModelContract.OnLoadItems() {
             @Override
             public void onSuccess(List<Item> items) {
+                sortItems(items);
                 List<ItemWithImage> itemWithImages = new ArrayList<>();
                 for (Item item : items) {
                     itemWithImages.add(new ItemWithImage(item));
@@ -62,6 +64,7 @@ public class ItemsPresenter {
         model.loadItemsFromLifehacker(new ItemsModelContract.OnLoadItems() {
             @Override
             public void onSuccess(List<Item> items) {
+                sortItems(items);
                 List<ItemWithImage> itemWithImages = new ArrayList<>();
                 for (Item item : items) {
                     itemWithImages.add(new ItemWithImage(item));
@@ -76,6 +79,11 @@ public class ItemsPresenter {
                 Log.d(TAG, "onSuccess: ");
             }
         });
+    }
+
+    private void sortItems(List<Item> items) {
+        Collections.sort(items, (o1, o2) -> o1.getPubDate().compareTo(o2.getPubDate()));
+        Collections.reverse(items);
     }
 
     private void downloadImages(List<Item> items) {
