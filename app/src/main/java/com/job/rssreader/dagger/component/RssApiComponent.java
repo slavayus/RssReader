@@ -1,6 +1,6 @@
-package com.job.rssreader.github.component;
+package com.job.rssreader.dagger.component;
 
-import com.job.rssreader.github.module.RssApiModule;
+import com.job.rssreader.dagger.module.RssApiModule;
 import com.job.rssreader.rss.RssApi;
 
 import javax.inject.Singleton;

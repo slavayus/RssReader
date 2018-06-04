@@ -1,22 +1,15 @@
 package com.job.rssreader;
 
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.job.rssreader.github.DaggerRssApiComponent;
-import com.job.rssreader.rss.RssApi;
+import com.job.rssreader.dagger.component.DaggerRssApiComponent;
 import com.job.rssreader.rss.pojo.Rss;
-import com.job.rssreader.utils.URLHelper;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 public class PostActivity extends SingleFragmentActivity {
 

@@ -1,4 +1,4 @@
-package com.job.rssreader.github.module;
+package com.job.rssreader.dagger.module;
 
 import com.job.rssreader.rss.RssApi;
 import com.job.rssreader.utils.URLHelper;
