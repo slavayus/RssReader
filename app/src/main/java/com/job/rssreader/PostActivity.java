@@ -1,5 +1,6 @@
 package com.job.rssreader;
 
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,14 +18,18 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
-public class PostActivity extends AppCompatActivity {
+public class PostActivity extends SingleFragmentActivity {
 
     private static final String TAG = "PostActivity";
 
     @Override
+    protected Fragment createFragment() {
+        return ItemsFragment.newInstance();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post);
 
         DaggerRssApiComponent
                 .create()
