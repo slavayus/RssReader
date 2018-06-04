@@ -15,6 +15,9 @@ public interface RssApi {
     @GET("/rss")
     Call<Rss> getLifehacker();
 
+    @GET("/TechCrunch")
+    Call<Rss> getFeedburner();
+
     @GET
     Call<ResponseBody> loadImage(@Url String url);
 

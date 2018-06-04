@@ -1,5 +1,7 @@
 package com.job.rssreader.dagger.module;
 
+import com.job.rssreader.dagger.annotation.LifehackerApi;
+import com.job.rssreader.dagger.annotation.LifehackerRetrofit;
 import com.job.rssreader.rss.RssApi;
 import com.job.rssreader.utils.URLHelper;
 
@@ -15,16 +17,18 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
  */
 
 @Module(includes = {XmlConverterModule.class})
-public class RssApiModule {
+public class LifehackerApiModule {
 
     @Singleton
     @Provides
-    RssApi rssApi(Retrofit retrofit) {
+    @LifehackerApi
+    RssApi rssApi(@LifehackerRetrofit Retrofit retrofit) {
         return retrofit.create(RssApi.class);
     }
 
     @Singleton
     @Provides
+    @LifehackerRetrofit
     Retrofit retrofit(SimpleXmlConverterFactory simpleXmlConverterFactory) {
         return new Retrofit.Builder()
                 .baseUrl(URLHelper.LIFEHACKER_BASE_URL)

@@ -11,9 +11,11 @@ import java.util.List;
  */
 
 public interface ItemsModelContract {
-    void loadItems(OnLoadItems onLoadItems);
+    void loadItemsFromLifehacker(OnLoadItems onLoadItems);
 
     void loadItemImage(String url, OnLoadImage onLoadImage);
+
+    void loadItemsFromFeedburner(OnLoadItems onLoadItems);
 
     interface OnLoadItems {
         void onSuccess(List<Item> items);

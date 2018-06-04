@@ -80,7 +80,9 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>
         void bind(ItemWithImage item, OnItemClickListener listener) {
             linearLayout.setOnClickListener(v -> listener.onItemClick(item.getItem()));
             itemTitle.setText(item.getItem().getTitle());
-            imageView.setImageBitmap(item.getImage());
+            if (item.getImage() != null) {
+                imageView.setImageBitmap(item.getImage());
+            }
         }
     }
 }

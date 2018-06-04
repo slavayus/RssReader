@@ -31,7 +31,32 @@ public class ItemsPresenter {
     }
 
     public void viewIsReady() {
-        model.loadItems(new ItemsModelContract.OnLoadItems() {
+        downloadFromLifehacker();
+        downloadFromFeedburner();
+        
+    }
+
+    private void downloadFromFeedburner() {
+        model.loadItemsFromFeedburner(new ItemsModelContract.OnLoadItems() {
+            @Override
+            public void onSuccess(List<Item> items) {
+                Log.d(TAG, "onSuccess: ");
+                List<ItemWithImage> itemWithImages = new ArrayList<>();
+                for (Item item : items) {
+                    itemWithImages.add(new ItemWithImage(item));
+                }
+//                view.showItems(itemWithImages);
+            }
+
+            @Override
+            public void onError() {
+                Log.d(TAG, "onError: ");
+            }
+        });
+    }
+
+    private void downloadFromLifehacker() {
+        model.loadItemsFromLifehacker(new ItemsModelContract.OnLoadItems() {
             @Override
             public void onSuccess(List<Item> items) {
                 List<ItemWithImage> itemWithImages = new ArrayList<>();
@@ -47,7 +72,6 @@ public class ItemsPresenter {
                 Log.d(TAG, "onSuccess: ");
             }
         });
-
     }
 
     private void downloadImages(List<Item> items) {

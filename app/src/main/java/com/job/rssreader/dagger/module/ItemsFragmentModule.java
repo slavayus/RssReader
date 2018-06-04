@@ -5,11 +5,12 @@ import android.content.Intent;
 import android.net.Uri;
 
 import com.job.rssreader.adapter.ItemsAdapter;
+import com.job.rssreader.dagger.annotation.FeedburnerApi;
+import com.job.rssreader.dagger.annotation.LifehackerApi;
 import com.job.rssreader.model.ItemsModel;
 import com.job.rssreader.model.ItemsModelContract;
 import com.job.rssreader.presenter.ItemsPresenter;
 import com.job.rssreader.rss.RssApi;
-import com.job.rssreader.rss.pojo.Item;
 
 import javax.inject.Singleton;
 
@@ -20,7 +21,7 @@ import dagger.Provides;
  * Created by slavik on 6/4/18.
  */
 
-@Module(includes = {RssApiModule.class, ApplicationContextModule.class})
+@Module(includes = {LifehackerApiModule.class, ApplicationContextModule.class, FeedburnerApiModule.class})
 public class ItemsFragmentModule {
 
     @Provides
@@ -54,7 +55,7 @@ public class ItemsFragmentModule {
 
     @Provides
     @Singleton
-    ItemsModelContract itemsModelContract(RssApi rssApi) {
-        return new ItemsModel(rssApi);
+    ItemsModelContract itemsModelContract(@LifehackerApi RssApi lifehacker, @FeedburnerApi RssApi feedburner) {
+        return new ItemsModel(lifehacker, feedburner);
     }
 }

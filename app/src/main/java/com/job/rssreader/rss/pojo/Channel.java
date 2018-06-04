@@ -2,7 +2,9 @@ package com.job.rssreader.rss.pojo;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Path;
 import org.simpleframework.xml.Root;
+import org.simpleframework.xml.Text;
 
 import java.util.List;
 
@@ -16,7 +18,8 @@ public class Channel {
     @Element(name = "title")
     private String title;
 
-    @Element(name = "link")
+    @Path("link")
+    @Text(required=false)
     private String link;
 
     @ElementList(name = "item", inline = true)

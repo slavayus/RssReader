@@ -2,6 +2,7 @@ package com.job.rssreader.model;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import com.job.rssreader.rss.RssApi;
 import com.job.rssreader.rss.pojo.Rss;
@@ -17,15 +18,18 @@ import retrofit2.Response;
 
 public class ItemsModel implements ItemsModelContract {
 
-    private final RssApi rssApi;
+    private static final String TAG = "ItemsModel";
+    private final RssApi lifehacker;
+    private final RssApi feedburner;
 
-    public ItemsModel(RssApi rssApi) {
-        this.rssApi = rssApi;
+    public ItemsModel(RssApi lifehacker, RssApi feedburner) {
+        this.lifehacker = lifehacker;
+        this.feedburner = feedburner;
     }
 
     @Override
-    public void loadItems(OnLoadItems onLoadItems) {
-        rssApi.getLifehacker().enqueue(new Callback<Rss>() {
+    public void loadItemsFromLifehacker(OnLoadItems onLoadItems) {
+        lifehacker.getLifehacker().enqueue(new Callback<Rss>() {
             @Override
             public void onResponse(Call<Rss> call, Response<Rss> response) {
                 if (response.isSuccessful()) {
@@ -46,7 +50,7 @@ public class ItemsModel implements ItemsModelContract {
 
     @Override
     public void loadItemImage(String url, OnLoadImage onLoadImage) {
-        rssApi.loadImage(url).enqueue(new Callback<ResponseBody>() {
+        lifehacker.loadImage(url).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
@@ -62,6 +66,29 @@ public class ItemsModel implements ItemsModelContract {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 onLoadImage.onError();
+            }
+        });
+    }
+
+    @Override
+    public void loadItemsFromFeedburner(OnLoadItems onLoadItems) {
+        feedburner.getFeedburner().enqueue(new Callback<Rss>() {
+            @Override
+            public void onResponse(Call<Rss> call, Response<Rss> response) {
+                Log.d(TAG, "onResponse: " + response.body().getChannel().getItems().size());
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        onLoadItems.onSuccess(response.body().getChannel().getItems());
+                        return;
+                    }
+                }
+                onLoadItems.onError();
+            }
+
+            @Override
+            public void onFailure(Call<Rss> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t.getMessage());
+                onLoadItems.onError();
             }
         });
     }
