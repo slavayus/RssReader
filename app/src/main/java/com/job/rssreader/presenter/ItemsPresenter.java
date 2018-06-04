@@ -21,6 +21,8 @@ public class ItemsPresenter {
     private final ItemsModelContract model;
     private ItemsPresenterContract view;
     private final String IMG_SRC_REG_EX = "<img src=\"([^>]*)\".*?>";
+    private boolean lifehackerIsDone = false;
+    private int lifehackerOffset = 0;
 
     public ItemsPresenter(ItemsModelContract model) {
         this.model = model;
@@ -33,19 +35,20 @@ public class ItemsPresenter {
     public void viewIsReady() {
         downloadFromLifehacker();
         downloadFromFeedburner();
-        
     }
 
     private void downloadFromFeedburner() {
         model.loadItemsFromFeedburner(new ItemsModelContract.OnLoadItems() {
             @Override
             public void onSuccess(List<Item> items) {
-                Log.d(TAG, "onSuccess: ");
                 List<ItemWithImage> itemWithImages = new ArrayList<>();
                 for (Item item : items) {
                     itemWithImages.add(new ItemWithImage(item));
                 }
-//                view.showItems(itemWithImages);
+                if (!lifehackerIsDone) {
+                    lifehackerOffset = itemWithImages.size();
+                }
+                view.showItems(itemWithImages);
             }
 
             @Override
@@ -63,6 +66,7 @@ public class ItemsPresenter {
                 for (Item item : items) {
                     itemWithImages.add(new ItemWithImage(item));
                 }
+                lifehackerIsDone = true;
                 view.showItems(itemWithImages);
                 downloadImages(items);
             }
@@ -85,7 +89,7 @@ public class ItemsPresenter {
 
                 @Override
                 public void onSuccess(Bitmap bm) {
-                    view.onLoadImage(finalI, bm);
+                    view.onLoadImage(finalI + lifehackerOffset, bm);
                     Log.d(TAG, "onSuccess: load image");
                 }
 

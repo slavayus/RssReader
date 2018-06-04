@@ -65,8 +65,8 @@ public class ItemsFragment extends Fragment implements ItemsPresenterContract {
     }
 
     @Override
-    public void showItems(List<ItemWithImage> items) {
-        mItemsAdapter.setData(items);
+    public synchronized void showItems(List<ItemWithImage> items) {
+        mItemsAdapter.addData(items);
     }
 
     @Override

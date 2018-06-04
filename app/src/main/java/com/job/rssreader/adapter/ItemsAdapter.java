@@ -59,8 +59,8 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>
         return mData.size();
     }
 
-    public void setData(List<ItemWithImage> data) {
-        this.mData = data;
+    public void addData(List<ItemWithImage> data) {
+        this.mData.addAll(data);
         notifyDataSetChanged();
     }
 
@@ -82,6 +82,8 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>
             itemTitle.setText(item.getItem().getTitle());
             if (item.getImage() != null) {
                 imageView.setImageBitmap(item.getImage());
+            } else {
+                imageView.setImageResource(R.drawable.empty_image);
             }
         }
     }
