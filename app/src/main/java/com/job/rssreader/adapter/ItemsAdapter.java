@@ -1,5 +1,6 @@
 package com.job.rssreader.adapter;
 
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.job.rssreader.ItemWithImage;
 import com.job.rssreader.R;
 import com.job.rssreader.rss.pojo.Item;
 
@@ -17,7 +19,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by slavik on 6/4/18.
@@ -25,10 +26,15 @@ import butterknife.OnClick;
 
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder> {
     private final OnItemClickListener listener;
-    private List<Item> mData = new ArrayList<>();
+    private List<ItemWithImage> mData = new ArrayList<>();
 
     public ItemsAdapter(OnItemClickListener listener) {
         this.listener = listener;
+    }
+
+    public void addImage(int index, Bitmap bm) {
+        mData.get(index).setImage(bm);
+        notifyItemChanged(index);
     }
 
     public interface OnItemClickListener {
@@ -53,7 +59,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>
         return mData.size();
     }
 
-    public void setData(List<Item> data) {
+    public void setData(List<ItemWithImage> data) {
         this.mData = data;
         notifyDataSetChanged();
     }
@@ -71,9 +77,10 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>
             ButterKnife.bind(this, view);
         }
 
-        void bind(Item item, OnItemClickListener listener) {
-            linearLayout.setOnClickListener(v -> listener.onItemClick(item));
-            itemTitle.setText(item.getTitle());
+        void bind(ItemWithImage item, OnItemClickListener listener) {
+            linearLayout.setOnClickListener(v -> listener.onItemClick(item.getItem()));
+            itemTitle.setText(item.getItem().getTitle());
+            imageView.setImageBitmap(item.getImage());
         }
     }
 }

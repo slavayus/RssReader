@@ -1,5 +1,6 @@
 package com.job.rssreader;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -14,7 +15,6 @@ import com.job.rssreader.dagger.component.DaggerItemsFragmentComponent;
 import com.job.rssreader.dagger.module.ApplicationContextModule;
 import com.job.rssreader.presenter.ItemsPresenter;
 import com.job.rssreader.presenter.ItemsPresenterContract;
-import com.job.rssreader.rss.pojo.Item;
 
 import java.util.List;
 
@@ -65,8 +65,13 @@ public class ItemsFragment extends Fragment implements ItemsPresenterContract {
     }
 
     @Override
-    public void showItems(List<Item> items) {
+    public void showItems(List<ItemWithImage> items) {
         mItemsAdapter.setData(items);
+    }
+
+    @Override
+    public void onLoadImage(int index, Bitmap bm) {
+        mItemsAdapter.addImage(index, bm);
     }
 
     @Override

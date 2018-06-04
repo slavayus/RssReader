@@ -1,6 +1,8 @@
 package com.job.rssreader.presenter;
 
-import com.job.rssreader.rss.pojo.Item;
+import android.graphics.Bitmap;
+
+import com.job.rssreader.ItemWithImage;
 
 import java.util.List;
 
@@ -9,5 +11,7 @@ import java.util.List;
  */
 
 public interface ItemsPresenterContract {
-    void showItems(List<Item> items);
+    void showItems(List<ItemWithImage> items);
+
+    void onLoadImage(int index, Bitmap bm);
 }
