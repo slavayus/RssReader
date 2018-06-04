@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="16dp">
+    android:layout_marginBottom="@dimen/cardview_margin"
+    android:layout_marginTop="@dimen/cardview_margin">
 
     <LinearLayout
         android:id="@+id/data_container"
@@ -16,8 +16,8 @@
 
         <ImageView
             android:id="@+id/item_image"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="@dimen/image_width"
+            android:layout_height="@dimen/image_height"
             android:contentDescription="@string/item_image"
             android:scaleType="centerCrop"
             android:src="@drawable/empty_image" />
@@ -25,8 +25,13 @@
         <TextView
             android:id="@+id/item_title"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/item_name" />
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="8dp"
+            android:drawableEnd="@drawable/ic_star"
+            android:text="@string/item_name"
+            android:textAlignment="center"
+            android:textSize="16sp" />
 
     </LinearLayout>
 
