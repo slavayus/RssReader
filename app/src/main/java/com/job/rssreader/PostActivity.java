@@ -33,7 +33,7 @@ public class PostActivity extends AppCompatActivity {
         retrofit.create(RssApi.class).getLifehacker().enqueue(new Callback<Rss>() {
             @Override
             public void onResponse(Call<Rss> call, Response<Rss> response) {
-                Log.d(TAG, "onResponse: " + response.body().getChannel().getTitle());
+                Log.d(TAG, "onResponse: " + response.body().getChannel().getItem().get(0).toString());
 
             }
 
@@ -46,36 +46,3 @@ public class PostActivity extends AppCompatActivity {
 
     }
 }
-
-/*
-new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try {
-                    Log.d(TAG, "onResponse: " + response.body().string());
-                } catch (IOException e) {
-                    e.printStackTrace();
-
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.d(TAG, "onFailure: "+t.getMessage());
-
-            }
-        }
- */
-
-/*new Callback<Rss>() {
-            @Override
-            public void onResponse(Call<Rss> call, Response<Rss> response) {
-                Log.d(TAG, "onResponse: " + response.body().getTitle());
-            }
-
-            @Override
-            public void onFailure(Call<Rss> call, Throwable t) {
-                Log.d(TAG, "onFailure: "+t.getMessage());
-            }
-        }*/
