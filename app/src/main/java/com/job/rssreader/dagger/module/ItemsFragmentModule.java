@@ -1,8 +1,6 @@
 package com.job.rssreader.dagger.module;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 
 import com.job.rssreader.adapter.ItemsAdapter;
 import com.job.rssreader.dagger.annotation.FeedburnerApi;
@@ -21,36 +19,25 @@ import dagger.Provides;
  * Created by slavik on 6/4/18.
  */
 
-@Module(includes = {LifehackerApiModule.class, ApplicationContextModule.class, FeedburnerApiModule.class})
+@Module(includes = {LifehackerApiModule.class, ContextModule.class, FeedburnerApiModule.class})
 public class ItemsFragmentModule {
 
     @Provides
     @Singleton
-    ItemsAdapter.OnItemClickListener onItemClickListener(Context context) {
-        return item -> {
-            String url = item.getLink();
-            if (!url.startsWith("http://") && !url.startsWith("https://")) {
-                url = "http://" + url;
-            }
-
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.setData(Uri.parse(url));
-            context.startActivity(intent);
-        };
+    ItemsAdapter.OnItemClickListener onItemClickListener(ItemsPresenter itemsPresenter) {
+        return itemsPresenter::itemClicked;
     }
 
     @Provides
     @Singleton
-    ItemsAdapter itemsAdapter(ItemsAdapter.OnItemClickListener onItemClickListener) {
-        return new ItemsAdapter(onItemClickListener);
+    ItemsAdapter itemsAdapter(ItemsAdapter.OnItemClickListener listener) {
+        return new ItemsAdapter(listener);
     }
 
     @Provides
     @Singleton
-    ItemsPresenter itemsPresenter(ItemsModelContract itemsModelContract) {
-        return new ItemsPresenter(itemsModelContract);
+    ItemsPresenter itemsPresenter(ItemsModelContract itemsModelContract, Context context) {
+        return new ItemsPresenter(itemsModelContract, context);
     }
 
     @Provides

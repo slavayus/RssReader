@@ -1,9 +1,19 @@
 package com.job.rssreader.presenter;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.job.rssreader.ItemWithImage;
+import com.job.rssreader.R;
 import com.job.rssreader.model.ItemsModelContract;
 import com.job.rssreader.rss.pojo.Item;
 
@@ -20,11 +30,13 @@ import java.util.regex.Pattern;
 public class ItemsPresenter {
     private static final String TAG = "ItemsPresenter";
     private final ItemsModelContract model;
+    private final Context context;
     private ItemsPresenterContract view;
     private final String IMG_SRC_REG_EX = "<img src=\"([^>]*)\".*?>";
 
-    public ItemsPresenter(ItemsModelContract model) {
+    public ItemsPresenter(ItemsModelContract model, Context context) {
         this.model = model;
+        this.context = context;
     }
 
     public void attachView(ItemsPresenterContract view) {
@@ -107,5 +119,44 @@ public class ItemsPresenter {
         Pattern imageLinkPattern = Pattern.compile(IMG_SRC_REG_EX);
         Matcher matcher = imageLinkPattern.matcher(description);
         return matcher.find() ? matcher.group(1) : null;
+    }
+
+    public void itemClicked(ItemWithImage item, int position) {
+        LayoutInflater inflater = view.getLayoutInflater();
+        View view = inflater.inflate(R.layout.list_item, null);
+        ImageView itemImage = view.findViewById(R.id.item_image);
+        TextView itemTitle = view.findViewById(R.id.item_title);
+
+        itemTitle.setText(item.getItem().getTitle());
+        if (item.getImage() != null) {
+            itemImage.setImageBitmap(item.getImage());
+        } else {
+            itemImage.setImageResource(R.drawable.empty_image);
+        }
+
+        new AlertDialog.Builder(context)
+                .setView(view)
+                .setPositiveButton(item.isStarred() ? R.string.unstar : R.string.star, (dialog, which) -> {
+                    item.setStarred(!item.isStarred());
+                    this.view.notifyItemChanged(position);
+                })
+                .setNeutralButton(R.string.open_browser, (dialog, which) -> {
+                    String url = item.getItem().getLink();
+                    if (url == null) {
+                        Toast.makeText(context, R.string.there_is_not_url, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (!url.startsWith("http://") && !url.startsWith("https://")) {
+                        url = "http://" + url;
+                    }
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.setData(Uri.parse(url));
+                    context.startActivity(intent);
+                })
+                .create()
+                .show();
     }
 }

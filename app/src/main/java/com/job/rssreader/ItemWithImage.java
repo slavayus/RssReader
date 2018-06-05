@@ -8,6 +8,7 @@ import com.job.rssreader.rss.pojo.Item;
 public class ItemWithImage {
     private Item item;
     private Bitmap image;
+    private boolean starred;
 
     public ItemWithImage(Item item) {
         this.item = item;
@@ -27,5 +28,13 @@ public class ItemWithImage {
 
     public void setImage(Bitmap image) {
         this.image = image;
+    }
+
+    public boolean isStarred() {
+        return starred;
+    }
+
+    public void setStarred(boolean starred) {
+        this.starred = starred;
     }
 }

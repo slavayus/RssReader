@@ -1,6 +1,7 @@
 package com.job.rssreader.presenter;
 
 import android.graphics.Bitmap;
+import android.view.LayoutInflater;
 
 import com.job.rssreader.ItemWithImage;
 
@@ -12,4 +13,8 @@ import java.util.List;
 
 public interface ItemsPresenterContract {
     void showItems(List<ItemWithImage> items);
+
+    void notifyItemChanged(int position);
+
+    LayoutInflater getLayoutInflater();
 }

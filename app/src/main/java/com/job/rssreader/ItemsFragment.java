@@ -1,5 +1,8 @@
 package com.job.rssreader;
 
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -11,7 +14,7 @@ import android.view.ViewGroup;
 
 import com.job.rssreader.adapter.ItemsAdapter;
 import com.job.rssreader.dagger.component.DaggerItemsFragmentComponent;
-import com.job.rssreader.dagger.module.ApplicationContextModule;
+import com.job.rssreader.dagger.module.ContextModule;
 import com.job.rssreader.presenter.ItemsPresenter;
 import com.job.rssreader.presenter.ItemsPresenterContract;
 
@@ -51,7 +54,7 @@ public class ItemsFragment extends Fragment implements ItemsPresenterContract {
 
         DaggerItemsFragmentComponent
                 .builder()
-                .applicationContextModule(new ApplicationContextModule(getContext()))
+                .contextModule(new ContextModule(getContext()))
                 .build()
                 .injectItemsFragment(this);
 
@@ -66,6 +69,11 @@ public class ItemsFragment extends Fragment implements ItemsPresenterContract {
     @Override
     public synchronized void showItems(List<ItemWithImage> items) {
         mItemsAdapter.addData(items);
+    }
+
+    @Override
+    public void notifyItemChanged(int position) {
+        mItemsAdapter.notifyItemChanged(position);
     }
 
     @Override

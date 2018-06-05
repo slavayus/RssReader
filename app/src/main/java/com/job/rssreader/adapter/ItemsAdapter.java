@@ -1,6 +1,5 @@
 package com.job.rssreader.adapter;
 
-import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 
 import com.job.rssreader.ItemWithImage;
 import com.job.rssreader.R;
-import com.job.rssreader.rss.pojo.Item;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +31,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>
     }
 
     public interface OnItemClickListener {
-        void onItemClick(Item item);
+        void onItemClick(ItemWithImage item, int position);
     }
 
     @NonNull
@@ -46,7 +44,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>
 
     @Override
     public void onBindViewHolder(@NonNull ItemsHolder holder, int position) {
-        holder.bind(mData.get(position), listener);
+        holder.bind(mData.get(position), listener, position);
     }
 
     @Override
@@ -72,12 +70,14 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>
             ButterKnife.bind(this, view);
         }
 
-        void bind(ItemWithImage item, OnItemClickListener listener) {
-            linearLayout.setOnClickListener(v -> listener.onItemClick(item.getItem()));
+        void bind(ItemWithImage item, OnItemClickListener listener, int position) {
+            linearLayout.setOnClickListener(v -> listener.onItemClick(item, position));
             itemTitle.setText(item.getItem().getTitle());
 
             if (item.isStarred()) {
-                itemTitle.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_star, 0, 0, 0);
+                itemTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_star, 0);
+            } else {
+                itemTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
 
 
