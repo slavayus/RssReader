@@ -8,8 +8,9 @@ import java.lang.ref.SoftReference;
 
 
 public class ItemWithImage {
+    private int id;
     private Item item;
-    private SoftReference<Bitmap> image;
+    private Bitmap image;
     private boolean starred;
 
     public ItemWithImage(Item item) {
@@ -24,11 +25,11 @@ public class ItemWithImage {
         this.item = item;
     }
 
-    public SoftReference<Bitmap> getImage() {
+    public Bitmap getImage() {
         return image;
     }
 
-    public void setImage(SoftReference<Bitmap> image) {
+    public void setImage(Bitmap image) {
         this.image = image;
     }
 
@@ -38,5 +39,13 @@ public class ItemWithImage {
 
     public void setStarred(boolean starred) {
         this.starred = starred;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

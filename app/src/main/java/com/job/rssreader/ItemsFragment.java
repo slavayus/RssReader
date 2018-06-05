@@ -85,7 +85,7 @@ public class ItemsFragment extends Fragment implements ItemsPresenterContract {
     }
 
     @Override
-    public void notifyItemChanged(int position) {
+    public synchronized void notifyItemChanged(int position) {
         mItemsAdapter.notifyItemChanged(position);
     }
 

@@ -113,7 +113,10 @@ public class ItemsPresenter {
 
                 @Override
                 public void onSuccess(Bitmap bm) {
-                    items.get(finalI).setImage(new SoftReference<Bitmap>(bm));
+                    items.get(finalI).setImage(bm);
+                    if (viewIsValid()) {
+                        view.get().notifyItemChanged(items.get(finalI).getId());
+                    }
                     Log.d(TAG, "onSuccess: load image");
                 }
 
@@ -142,8 +145,8 @@ public class ItemsPresenter {
         TextView itemTitle = view.findViewById(R.id.item_title);
 
         itemTitle.setText(item.getItem().getTitle());
-        if (item.getImage() != null && item.getImage().get() != null) {
-            itemImage.setImageBitmap(item.getImage().get());
+        if (item.getImage() != null) {
+            itemImage.setImageBitmap(item.getImage());
         } else {
             itemImage.setImageResource(R.drawable.empty_image);
         }
