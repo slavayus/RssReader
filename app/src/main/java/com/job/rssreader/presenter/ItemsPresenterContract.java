@@ -12,6 +12,4 @@ import java.util.List;
 
 public interface ItemsPresenterContract {
     void showItems(List<ItemWithImage> items);
-
-    void onLoadImage(int index, Bitmap bm);
 }

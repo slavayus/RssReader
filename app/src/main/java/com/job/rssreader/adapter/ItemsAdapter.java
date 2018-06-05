@@ -32,11 +32,6 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>
         this.listener = listener;
     }
 
-    public void addImage(int index, Bitmap bm) {
-        mData.get(index).setImage(bm);
-        notifyItemChanged(index);
-    }
-
     public interface OnItemClickListener {
         void onItemClick(Item item);
     }
@@ -80,6 +75,12 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemsHolder>
         void bind(ItemWithImage item, OnItemClickListener listener) {
             linearLayout.setOnClickListener(v -> listener.onItemClick(item.getItem()));
             itemTitle.setText(item.getItem().getTitle());
+
+            if (item.isStarred()) {
+                itemTitle.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_star, 0, 0, 0);
+            }
+
+
             if (item.getImage() != null) {
                 imageView.setImageBitmap(item.getImage());
             } else {

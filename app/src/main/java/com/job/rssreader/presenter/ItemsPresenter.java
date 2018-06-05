@@ -22,8 +22,6 @@ public class ItemsPresenter {
     private final ItemsModelContract model;
     private ItemsPresenterContract view;
     private final String IMG_SRC_REG_EX = "<img src=\"([^>]*)\".*?>";
-    private boolean lifehackerIsDone = false;
-    private int lifehackerOffset = 0;
 
     public ItemsPresenter(ItemsModelContract model) {
         this.model = model;
@@ -47,9 +45,6 @@ public class ItemsPresenter {
                 for (Item item : items) {
                     itemWithImages.add(new ItemWithImage(item));
                 }
-                if (!lifehackerIsDone) {
-                    lifehackerOffset = itemWithImages.size();
-                }
                 view.showItems(itemWithImages);
             }
 
@@ -69,9 +64,8 @@ public class ItemsPresenter {
                 for (Item item : items) {
                     itemWithImages.add(new ItemWithImage(item));
                 }
-                lifehackerIsDone = true;
                 view.showItems(itemWithImages);
-                downloadImages(items);
+                downloadImages(itemWithImages);
             }
 
             @Override
@@ -86,9 +80,9 @@ public class ItemsPresenter {
         Collections.reverse(items);
     }
 
-    private void downloadImages(List<Item> items) {
+    private void downloadImages(List<ItemWithImage> items) {
         for (int i = 0; i < items.size(); i++) {
-            String url = parseImageUrl(items.get(i).getDescription());
+            String url = parseImageUrl(items.get(i).getItem().getDescription());
             if (url == null) {
                 continue;
             }
@@ -97,7 +91,7 @@ public class ItemsPresenter {
 
                 @Override
                 public void onSuccess(Bitmap bm) {
-                    view.onLoadImage(finalI + lifehackerOffset, bm);
+                    items.get(finalI).setImage(bm);
                     Log.d(TAG, "onSuccess: load image");
                 }
 

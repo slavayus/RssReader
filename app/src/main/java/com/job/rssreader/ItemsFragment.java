@@ -1,6 +1,5 @@
 package com.job.rssreader;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -67,11 +66,6 @@ public class ItemsFragment extends Fragment implements ItemsPresenterContract {
     @Override
     public synchronized void showItems(List<ItemWithImage> items) {
         mItemsAdapter.addData(items);
-    }
-
-    @Override
-    public void onLoadImage(int index, Bitmap bm) {
-        mItemsAdapter.addImage(index, bm);
     }
 
     @Override
