@@ -4,10 +4,12 @@ import android.graphics.Bitmap;
 
 import com.job.rssreader.rss.pojo.Item;
 
+import java.lang.ref.SoftReference;
+
 
 public class ItemWithImage {
     private Item item;
-    private Bitmap image;
+    private SoftReference<Bitmap> image;
     private boolean starred;
 
     public ItemWithImage(Item item) {
@@ -22,11 +24,11 @@ public class ItemWithImage {
         this.item = item;
     }
 
-    public Bitmap getImage() {
+    public SoftReference<Bitmap> getImage() {
         return image;
     }
 
-    public void setImage(Bitmap image) {
+    public void setImage(SoftReference<Bitmap> image) {
         this.image = image;
     }
 

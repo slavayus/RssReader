@@ -17,4 +17,8 @@ public interface ItemsPresenterContract {
     void notifyItemChanged(int position);
 
     LayoutInflater getLayoutInflater();
+
+    void setStarState(boolean starState);
+
+    boolean getStarState();
 }

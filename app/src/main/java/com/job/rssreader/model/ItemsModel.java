@@ -65,6 +65,7 @@ public class ItemsModel implements ItemsModelContract {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t.getMessage());
                 onLoadImage.onError();
             }
         });

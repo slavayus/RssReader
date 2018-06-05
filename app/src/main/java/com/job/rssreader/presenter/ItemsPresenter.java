@@ -17,6 +17,8 @@ import com.job.rssreader.R;
 import com.job.rssreader.model.ItemsModelContract;
 import com.job.rssreader.rss.pojo.Item;
 
+import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -31,7 +33,7 @@ public class ItemsPresenter {
     private static final String TAG = "ItemsPresenter";
     private final ItemsModelContract model;
     private final Context context;
-    private ItemsPresenterContract view;
+    private WeakReference<ItemsPresenterContract> view;
     private final String IMG_SRC_REG_EX = "<img src=\"([^>]*)\".*?>";
 
     public ItemsPresenter(ItemsModelContract model, Context context) {
@@ -40,7 +42,7 @@ public class ItemsPresenter {
     }
 
     public void attachView(ItemsPresenterContract view) {
-        this.view = view;
+        this.view = new WeakReference<>(view);
     }
 
     public void viewIsReady() {
@@ -57,7 +59,9 @@ public class ItemsPresenter {
                 for (Item item : items) {
                     itemWithImages.add(new ItemWithImage(item));
                 }
-                view.showItems(itemWithImages);
+                if (viewIsValid()) {
+                    view.get().showItems(itemWithImages);
+                }
             }
 
             @Override
@@ -65,6 +69,10 @@ public class ItemsPresenter {
                 Log.d(TAG, "onError: ");
             }
         });
+    }
+
+    private boolean viewIsValid() {
+        return view.get() != null;
     }
 
     private void downloadFromLifehacker() {
@@ -76,7 +84,9 @@ public class ItemsPresenter {
                 for (Item item : items) {
                     itemWithImages.add(new ItemWithImage(item));
                 }
-                view.showItems(itemWithImages);
+                if (viewIsValid()) {
+                    view.get().showItems(itemWithImages);
+                }
                 downloadImages(itemWithImages);
             }
 
@@ -103,7 +113,7 @@ public class ItemsPresenter {
 
                 @Override
                 public void onSuccess(Bitmap bm) {
-                    items.get(finalI).setImage(bm);
+                    items.get(finalI).setImage(new SoftReference<Bitmap>(bm));
                     Log.d(TAG, "onSuccess: load image");
                 }
 
@@ -122,14 +132,18 @@ public class ItemsPresenter {
     }
 
     public void itemClicked(ItemWithImage item, int position) {
-        LayoutInflater inflater = view.getLayoutInflater();
+        if (!viewIsValid()) {
+            return;
+        }
+        ItemsPresenterContract storedView = view.get();
+        LayoutInflater inflater = storedView.getLayoutInflater();
         View view = inflater.inflate(R.layout.list_item, null);
         ImageView itemImage = view.findViewById(R.id.item_image);
         TextView itemTitle = view.findViewById(R.id.item_title);
 
         itemTitle.setText(item.getItem().getTitle());
-        if (item.getImage() != null) {
-            itemImage.setImageBitmap(item.getImage());
+        if (item.getImage() != null && item.getImage().get() != null) {
+            itemImage.setImageBitmap(item.getImage().get());
         } else {
             itemImage.setImageResource(R.drawable.empty_image);
         }
@@ -138,7 +152,7 @@ public class ItemsPresenter {
                 .setView(view)
                 .setPositiveButton(item.isStarred() ? R.string.unstar : R.string.star, (dialog, which) -> {
                     item.setStarred(!item.isStarred());
-                    this.view.notifyItemChanged(position);
+                    storedView.notifyItemChanged(position);
                 })
                 .setNeutralButton(R.string.open_browser, (dialog, which) -> {
                     String url = item.getItem().getLink();
@@ -158,5 +172,11 @@ public class ItemsPresenter {
                 })
                 .create()
                 .show();
+    }
+
+    public void menuClicked() {
+        if (viewIsValid()) {
+            view.get().setStarState(!view.get().getStarState());
+        }
     }
 }

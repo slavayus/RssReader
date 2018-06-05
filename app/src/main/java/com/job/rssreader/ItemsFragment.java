@@ -1,14 +1,14 @@
 package com.job.rssreader;
 
-import android.app.AlertDialog;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -43,6 +43,7 @@ public class ItemsFragment extends Fragment implements ItemsPresenterContract {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -71,6 +72,18 @@ public class ItemsFragment extends Fragment implements ItemsPresenterContract {
         mItemsAdapter.addData(items);
     }
 
+
+    @Override
+    public void setStarState(boolean starState) {
+        mItemsAdapter.setStarState(starState);
+        mItemsAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean getStarState() {
+        return mItemsAdapter.getStarState();
+    }
+
     @Override
     public void notifyItemChanged(int position) {
         mItemsAdapter.notifyItemChanged(position);
@@ -80,5 +93,20 @@ public class ItemsFragment extends Fragment implements ItemsPresenterContract {
     public void onDestroyView() {
         super.onDestroyView();
         bind.unbind();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.main_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_star:
+                mPresenter.menuClicked();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -6,4 +6,5 @@
     <string name="open_browser">Открыть в браузере</string>
     <string name="unstar">Unstar</string>
     <string name="there_is_not_url">Отсутсвует ссылка</string>
+    <string name="action_star">Starred</string>
 </resources>
